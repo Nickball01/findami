@@ -348,9 +348,7 @@
       <div class="success">
         <div class="question">Fatto.</div>
         <p>Il tuo profilo è registrato. Ti scrivo quando troviamo qualcuno compatibile.</p>
-        <p style="margin-top: 24px; font-size: 13px; color: #aaa; letter-spacing: 0.05em; text-transform: uppercase;">Il tuo codice identificativo</p>
-        <p id="user-id" style="font-size: 22px; font-weight: 500; color: #111; letter-spacing: 0.1em; margin: 6px 0 12px;"></p>
-        <p style="font-size: 13px; color: #999;">Conserva questo codice. Ti servirà per qualsiasi richiesta futura, inclusa la cancellazione dei tuoi dati. Lo abbiamo anche inviato alla tua email.</p>
+        <p>Nel frattempo — continua a studiare.</p>
       </div>
     </div>
 
@@ -419,22 +417,13 @@
     document.getElementById('sub').disabled = !ok;
   }
 
-  function generateId() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let id = 'FM-';
-    for (let i = 0; i < 6; i++) id += chars[Math.floor(Math.random() * chars.length)];
-    return id;
-  }
-
   function submitForm() {
     data.testo = data.step1 === 'altro'
       ? document.getElementById('free-text-alt').value
       : document.getElementById('free-text').value;
     data.email = document.getElementById('email').value;
-    data.id = generateId();
     console.log(data); // → Supabase qui
     go('success');
-    document.getElementById('user-id').textContent = data.id;
   }
 </script>
 </body>
