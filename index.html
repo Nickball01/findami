@@ -373,6 +373,8 @@
     btn.closest('.options').querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
     btn.classList.add('selected');
     data['step' + step] = btn.dataset.value;
+    if (step === 1) data.area_label = btn.textContent.trim();
+    if (step === 2) data.livello_label = btn.textContent.trim();
     document.getElementById('n' + step).disabled = false;
   }
 
@@ -436,8 +438,8 @@
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify({
-          area: data.step1 || null,
-          livello: data.step2 || null,
+          area: data.area_label || null,
+          livello: data.livello_label || null,
           testo: data.testo || null,
           email: data.email
         })
