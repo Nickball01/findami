@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Findami</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #fff;
+      color: #111;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      padding: 0 48px;
+      background: #fff;
+      border-bottom: 1px solid #e8e8e8;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .site-name {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #111;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 100px 48px 120px;
+    }
+
+    .hero {
+      padding: 80px 0 60px;
+      max-width: 620px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.3;
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p { color: #555; font-size: 16px; line-height: 1.8; }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e8e8e8;
+      margin: 0 0 60px;
+    }
+
+    .form-section { max-width: 560px; }
+
+    .form-title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 32px;
+    }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .question {
+      font-size: 18px;
+      font-weight: 400;
+      color: #111;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .opt {
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      background: #fff;
+      color: #333;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .opt:hover { border-color: #999; }
+    .opt.selected { border-color: #111; background: #f7f7f7; color: #111; font-weight: 400; }
+
+    textarea {
+      width: 100%;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 14px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: #111;
+      line-height: 1.7;
+      resize: vertical;
+      min-height: 150px;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 6px;
+    }
+    textarea:focus { border-color: #999; }
+    textarea::placeholder { color: #ccc; }
+
+    .word-count {
+      font-size: 12px;
+      color: #ccc;
+      text-align: right;
+      margin-bottom: 32px;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 12px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: #111;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 16px;
+    }
+    input[type="email"]:focus { border-color: #999; }
+    input[type="email"]::placeholder { color: #ccc; }
+
+    .privacy-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 32px;
+      font-size: 13px;
+      color: #999;
+      line-height: 1.6;
+    }
+    .privacy-row input { margin-top: 3px; cursor: pointer; flex-shrink: 0; }
+    .privacy-row a { color: #111; }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .btn {
+      background: #111;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn:hover:not(:disabled) { background: #333; }
+    .btn:disabled { background: #e0e0e0; color: #bbb; cursor: not-allowed; }
+
+    .btn-back {
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #bbb;
+      cursor: pointer;
+      padding: 0;
+    }
+    .btn-back:hover { color: #111; }
+
+    .progress {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 40px;
+    }
+    .progress-seg {
+      height: 2px;
+      flex: 1;
+      background: #ebebeb;
+      border-radius: 1px;
+      transition: background 0.3s;
+    }
+    .progress-seg.done { background: #111; }
+
+    .success .question { margin-bottom: 12px; }
+    .success p { color: #555; margin-bottom: 8px; }
+
+    footer {
+      border-top: 1px solid #e8e8e8;
+      padding: 24px 48px;
+      font-size: 12px;
+      color: #ccc;
+      display: flex;
+      justify-content: space-between;
+    }
+    footer a { color: #ccc; text-decoration: none; }
+    footer a:hover { color: #111; }
+
+    .privacy-section {
+      max-width: 560px;
+      margin-top: 80px;
+      padding-top: 60px;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .privacy-section .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 16px;
+    }
+
+    .privacy-section p {
+      color: #555;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .privacy-section a {
+      color: #111;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  </style>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<nav>
+  <div class="site-name">Findami</div>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Trova qualcuno<br/>come te.</h1>
+    <p>Ciao, ho creato questo progetto partendo da un bisogno personale: trovare qualcuno come me. Oggi abbiamo infiniti modi per connetterci con gli altri, ma avevo paura di espormi. Findami nasce da questo — un progetto che mette in contatto persone con gli stessi interessi e la stessa voglia di fare, nel modo più anonimo possibile.</p>
+  </div>
+
+  <hr/>
+
+  <div class="form-section">
+
+    <div class="form-title">Questionario</div>
+
+    <div class="progress">
+      <div class="progress-seg" id="p1"></div>
+      <div class="progress-seg" id="p2"></div>
+      <div class="progress-seg" id="p3"></div>
+      <div class="progress-seg" id="p4"></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step active" id="step-1">
+      <div class="question">Qual è la tua area di interesse?</div>
+      <div class="options">
+        <button class="opt" data-value="trading" onclick="pick(this,1)">Trading</button>
+        <button class="opt" data-value="macro" onclick="pick(this,1)">Macroeconomia & Geopolitica</button>
+        <button class="opt" data-value="startup" onclick="pick(this,1)">Start-up & Idee di business</button>
+        <button class="opt" data-value="altro" onclick="pick(this,1)">Nessuna tra quelle proposte</button>
+      </div>
+      <div class="actions">
+        <button class="btn" id="n1" onclick="nextFromStep1()" disabled>Avanti</button>
+      </div>
+    </div>
+
+    <!-- STEP 1B -->
+    <div class="step" id="step-1b">
+      <div class="question">Con chi vorresti fare il match?</div>
+      <textarea id="free-text-alt" placeholder="Descrivi che tipo di persona stai cercando, quali interessi condivide, cosa vorresti fare insieme." oninput="countWordsAlt()" maxlength="2500"></textarea>
+      <div class="word-count"><span id="wc-alt">0</span> / 500 parole</div>
+      <div class="actions">
+        <button class="btn-back" onclick="go('1')">Indietro</button>
+        <button class="btn" id="n1b" onclick="go('4')">Avanti</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step-2">
+      <div class="question">A che punto sei con questo ambito?</div>
+      <div class="options">
+        <button class="opt" data-value="inizio" onclick="pick(this,2)">Ho voglia di cominciare</button>
+        <button class="opt" data-value="discontinuo" onclick="pick(this,2)">Seguo ma non con continuità</button>
+        <button class="opt" data-value="approfondire" onclick="pick(this,2)">Voglio approfondire</button>
+      </div>
+      <div class="actions">
+        <button class="btn-back" onclick="go('1')">Indietro</button>
+        <button class="btn" id="n2" onclick="go('3')" disabled>Avanti</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step-3">
+      <div class="question">Cosa vorresti far sapere al tuo match?</div>
+      <textarea id="free-text" placeholder="Chi sei, cosa cerchi, cosa puoi offrire. Scrivi liberamente." oninput="countWords()" maxlength="2500"></textarea>
+      <div class="word-count"><span id="wc">0</span> / 500 parole</div>
+      <div class="actions">
+        <button class="btn-back" onclick="go('2')">Indietro</button>
+        <button class="btn" id="n3" onclick="go('4')">Avanti</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" id="step-4">
+      <div class="question">Inserisci una mail per ricevere la notifica del match.</div>
+      <input type="email" id="email" placeholder="la.tua@email.it" oninput="checkEmail()"/>
+      <div class="privacy-row">
+        <input type="checkbox" id="cb" onchange="checkEmail()"/>
+        <label for="cb">Ho letto e accetto la <a href="privacy.html" target="_blank">Privacy Policy</a>. I miei dati saranno usati solo per il matching.</label>
+      </div>
+      <div class="actions">
+        <button class="btn-back" onclick="backFromStep4()">Indietro</button>
+        <button class="btn" id="sub" onclick="submitForm()" disabled>Invia</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="step" id="step-success">
+      <div class="success">
+        <div class="question">Fatto.</div>
+        <p>Il tuo profilo è registrato. Ti scrivo quando troviamo qualcuno compatibile.</p>
+        <p style="margin-top: 24px; font-size: 13px; color: #aaa; letter-spacing: 0.05em; text-transform: uppercase;">Il tuo codice identificativo</p>
+        <p id="user-id" style="font-size: 22px; font-weight: 500; color: #111; letter-spacing: 0.1em; margin: 6px 0 12px;"></p>
+        <p style="font-size: 13px; color: #999;">Conserva questo codice. Ti servirà per qualsiasi richiesta futura, inclusa la cancellazione dei tuoi dati. Lo abbiamo anche inviato alla tua email.</p>
+      </div>
+    </div>
+
+  </div>
+  <div class="privacy-section">
+    <div class="section-label">Contattami</div>
+    <p>Scrivimi a <a href="mailto:aiutamiinfo@gmail.com">aiutamiinfo@gmail.com</a></p>
+  </div>
+
+</div>
+
+<footer>
+  <span>© 2026 Findami</span>
+  <a href="privacy.html">Privacy Policy</a>
+</footer>
+
+<script>
+  const data = {};
+  let cur = '1';
+
+  function pick(btn, step) {
+    btn.closest('.options').querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+    btn.classList.add('selected');
+    data['step' + step] = btn.dataset.value;
+    document.getElementById('n' + step).disabled = false;
+  }
+
+  function go(n) {
+    const curId = cur === 'success' ? 'step-success' : 'step-' + cur;
+    document.getElementById(curId).classList.remove('active');
+    cur = n;
+    const nextId = n === 'success' ? 'step-success' : 'step-' + n;
+    document.getElementById(nextId).classList.add('active');
+    const pos = { '1': 1, '1b': 2, '2': 2, '3': 3, '4': 4, 'success': 5 };
+    updateProgress(pos[n] || 1);
+    
+  }
+
+  function nextFromStep1() {
+    go(data.step1 === 'altro' ? '1b' : '2');
+  }
+
+  function backFromStep4() {
+    go(data.step1 === 'altro' ? '1b' : '3');
+  }
+
+  function updateProgress(n) {
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('p' + i).classList.toggle('done', i < n);
+    }
+  }
+
+  function countWords() {
+    const t = document.getElementById('free-text').value.trim();
+    document.getElementById('wc').textContent = t === '' ? 0 : t.split(/\s+/).length;
+  }
+
+  function countWordsAlt() {
+    const t = document.getElementById('free-text-alt').value.trim();
+    document.getElementById('wc-alt').textContent = t === '' ? 0 : t.split(/\s+/).length;
+  }
+
+  function checkEmail() {
+    const e = document.getElementById('email').value.trim();
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) && document.getElementById('cb').checked;
+    document.getElementById('sub').disabled = !ok;
+  }
+
+  function generateId() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let id = 'FM-';
+    for (let i = 0; i < 6; i++) id += chars[Math.floor(Math.random() * chars.length)];
+    return id;
+  }
+
+  function submitForm() {
+    data.testo = data.step1 === 'altro'
+      ? document.getElementById('free-text-alt').value
+      : document.getElementById('free-text').value;
+    data.email = document.getElementById('email').value;
+    data.id = generateId();
+    console.log(data); // → Supabase qui
+    go('success');
+    document.getElementById('user-id').textContent = data.id;
+  }
+</script>
+</body>
+</html>
