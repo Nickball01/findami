@@ -531,4 +531,17 @@
         headers: {
           'Content-Type': 'application/json',
           'apikey': SUPABASE_KEY,
-          
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch(e) {
+      console.error('Errore:', e);
+    }
+
+    go('success');
+  }
+</script>
+</body>
+</html>
