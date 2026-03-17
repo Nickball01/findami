@@ -330,6 +330,7 @@
         <input type="text" id="tag-input" class="tag-input" placeholder="es. fotografia, startup, musica..." autocomplete="off"/>
       </div>
       <div class="field-hint" id="tag-hint">0 / 5 parole chiave</div>
+      <div id="tag-error" style="font-size:13px;color:#e53935;margin-top:4px;margin-bottom:8px;display:none;">Inserisci solo parole valide (lettere, min. 2 caratteri).</div>
       <div class="actions">
         <button class="btn" id="n1" onclick="go('2')" disabled>Avanti</button>
       </div>
@@ -351,8 +352,8 @@
     <div class="step" id="step-3">
       <div class="question">Dove ti avvisiamo?</div>
       <div class="question-sub">Ti scriveremo solo quando troviamo qualcuno compatibile.</div>
-      <input type="email" id="email" placeholder="Inserisci un'email" oninput="checkEmail()"/>
-      <div id="email-error" style="font-size:13px;color:#e53935;margin-top:-10px;margin-bottom:16px;display:none;">Fornisci un'email valida</div>
+      <input type="email" id="email" placeholder="Inserisci una mail" oninput="checkEmail()"/>
+      <div id="email-error" style="font-size:13px;color:#e53935;margin-top:-10px;margin-bottom:16px;display:none;">Fornisci una email valida</div>
       <div class="privacy-row">
         <input type="checkbox" id="cb" onchange="checkEmail()"/>
         <label for="cb">Ho letto e accetto la <a href="privacy.html" target="_blank">Privacy Policy</a>. I miei dati saranno usati solo per il matching.</label>
@@ -427,10 +428,15 @@
 
   function addTag(val) {
     const v = val.replace(/,/g, '').trim().toLowerCase();
-    if (!v || tags.includes(v) || tags.length >= MAX_TAGS) {
+    const errorEl = document.getElementById('tag-error');
+    if (!v || tags.length >= MAX_TAGS) { tagInput.value = ''; return; }
+    if (!/^[a-zA-ZÀ-ɏ -]{2,}$/.test(v)) {
+      errorEl.style.display = 'block';
       tagInput.value = '';
       return;
     }
+    errorEl.style.display = 'none';
+    if (tags.includes(v)) { tagInput.value = ''; return; }
     tags.push(v);
     renderTags();
     tagInput.value = '';
