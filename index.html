@@ -152,27 +152,61 @@
       line-height: 1.6;
     }
 
-    .keyword-input-wrap {
+    .tag-input-wrap {
       border: 1px solid var(--light);
       border-radius: 6px;
+      padding: 12px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      cursor: text;
       transition: border-color 0.15s;
       margin-bottom: 10px;
+      min-height: 54px;
     }
-    .keyword-input-wrap:focus-within { border-color: #999; }
+    .tag-input-wrap:focus-within { border-color: #999; }
 
-    input[type="text"].kw {
-      width: 100%;
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--black);
+      color: var(--white);
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 400;
+      animation: tagIn 0.15s ease;
+    }
+
+    @keyframes tagIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .tag-remove {
+      cursor: pointer;
+      opacity: 0.5;
+      font-size: 14px;
+      line-height: 1;
+      transition: opacity 0.1s;
+    }
+    .tag-remove:hover { opacity: 1; }
+
+    .tag-input {
       border: none;
       outline: none;
-      padding: 14px 16px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 300;
       color: var(--black);
       background: transparent;
-      border-radius: 6px;
+      flex: 1;
+      min-width: 120px;
     }
-    input[type="text"].kw::placeholder { color: #ccc; }
+    .tag-input::placeholder { color: #ccc; }
+    .tag-input:disabled { cursor: not-allowed; }
 
     .field-hint {
       font-size: 12px;
@@ -274,25 +308,6 @@
     .success .question { margin-bottom: 12px; }
     .success p { color: #555; margin-bottom: 8px; font-size: 15px; }
 
-    .contact-section {
-      max-width: 540px;
-      margin-top: 80px;
-      padding-top: 60px;
-      border-top: 1px solid var(--light);
-    }
-
-    .section-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #bbb;
-      margin-bottom: 16px;
-    }
-
-    .contact-section p { color: #555; margin-bottom: 12px; font-size: 14px; }
-    .contact-section a { color: var(--black); text-decoration: underline; text-underline-offset: 3px; }
-
     footer {
       border-top: 1px solid var(--light);
       padding: 24px 48px;
@@ -341,25 +356,25 @@
       <div class="progress-seg" id="p3"></div>
     </div>
 
-    <!-- STEP 1: KEYWORD -->
+    <!-- STEP 1: TAG -->
     <div class="step active" id="step-1">
-      <div class="question">Qual è il tuo interesse principale?</div>
-      <div class="question-sub">Scrivi una parola o una breve frase.</div>
-      <div class="keyword-input-wrap">
-        <input type="text" class="kw" id="keyword-input" placeholder="es. fotografia, startup, musica..." autocomplete="off" oninput="onKeywordInput()"/>
+      <div class="question">Quali sono i tuoi interessi?</div>
+      <div class="question-sub">Premi Invio o virgola dopo ogni parola. Massimo 5 — anche una sola è sufficiente.</div>
+      <div class="tag-input-wrap" id="tag-wrap" onclick="document.getElementById('tag-input').focus()">
+        <input type="text" id="tag-input" class="tag-input" placeholder="es. fotografia, startup, musica..." autocomplete="off"/>
       </div>
-      <div class="field-hint">Una parola è sufficiente.</div>
+      <div class="field-hint" id="tag-hint">0 / 5 parole chiave</div>
       <div class="actions">
-        <button class="btn" id="n1" onclick="step1Next()" disabled>Avanti</button>
+        <button class="btn" id="n1" onclick="go('2')" disabled>Avanti</button>
       </div>
     </div>
 
-    <!-- STEP 1B: DESCRIZIONE (condizionale) -->
-    <div class="step" id="step-1b">
-      <div class="question">Raccontaci di più.</div>
-      <div class="question-sub" id="step1b-sub">Molte persone condividono questo interesse — aiutaci a trovare chi fa davvero per te.</div>
-      <textarea id="descrizione" placeholder="Cosa vorresti fare con questa passione? Con chi vorresti farlo?" oninput="countWordsDesc()" maxlength="2500"></textarea>
-      <div class="word-count"><span id="wc-desc">0</span> / 300 parole</div>
+    <!-- STEP 2: TESTO -->
+    <div class="step" id="step-2">
+      <div class="question">Cosa vorresti fare insieme?</div>
+      <div class="question-sub">Scrivi liberamente — chi sei, cosa cerchi, cosa puoi offrire.</div>
+      <textarea id="free-text" placeholder="es. Cerco qualcuno con cui sviluppare un progetto, scambiarmi idee, o semplicemente parlare di quello che ci appassiona..." oninput="countWords()" maxlength="2500"></textarea>
+      <div class="word-count"><span id="wc">0</span> / 300 parole</div>
       <div class="actions">
         <button class="btn-back" onclick="go('1')">Indietro</button>
         <button class="btn" onclick="go('3')">Avanti</button>
@@ -376,7 +391,7 @@
         <label for="cb">Ho letto e accetto la <a href="privacy.html" target="_blank">Privacy Policy</a>. I miei dati saranno usati solo per il matching.</label>
       </div>
       <div class="actions">
-        <button class="btn-back" onclick="backFrom3()">Indietro</button>
+        <button class="btn-back" onclick="go('2')">Indietro</button>
         <button class="btn" id="sub" onclick="submitForm()" disabled>Invia</button>
       </div>
     </div>
@@ -392,8 +407,6 @@
 
   </div>
 
-
-
 </div>
 
 <footer>
@@ -405,11 +418,9 @@
   const SUPABASE_URL = 'https://ncdmtnrepmjefgbzioxy.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jZG10bnJlcG1qZWZnYnppb3h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0ODMwNzUsImV4cCI6MjA4OTA1OTA3NX0.noVVclpJogclqv6zzRTBvsc5zTc7w6xfpUhNxoa0ENM';
 
-
+  const MAX_TAGS = 5;
   let cur = '1';
-  let keyword = '';
-  let categoria = '';
-  let descrizioneRichiesta = false;
+  const tags = [];
 
   // --- COUNTER ---
   async function loadCount() {
@@ -437,7 +448,7 @@
     cur = n;
     const nextId = n === 'success' ? 'step-success' : 'step-' + n;
     document.getElementById(nextId).classList.add('active');
-    const pos = { '1': 1, '1b': 2, '3': 3, 'success': 4 };
+    const pos = { '1': 1, '2': 2, '3': 3, 'success': 4 };
     updateProgress(pos[n] || 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -448,64 +459,63 @@
     }
   }
 
-  function backFrom3() {
-    go(descrizioneRichiesta ? '1b' : '1');
-  }
+  // --- TAG INPUT ---
+  const tagInput = document.getElementById('tag-input');
+  const tagWrap = document.getElementById('tag-wrap');
 
-  // --- KEYWORD INPUT ---
-  function onKeywordInput() {
-    keyword = document.getElementById('keyword-input').value.trim();
-    document.getElementById('n1').disabled = keyword.length < 2;
-  }
-
-  // --- STEP 1 AVANTI: normalizza con AI + controlla count ---
-  async function step1Next() {
-    const btn = document.getElementById('n1');
-    btn.disabled = true;
-    btn.textContent = '...';
-
-    try {
-      // 1. Normalizza keyword tramite Edge Function (chiave sicura lato server)
-      const aiRes = await fetch('/api/normalizza', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ keyword })
-      });
-      const aiData = await aiRes.json();
-      categoria = aiData.categoria;
-
-      // 2. Conta iscritti con stessa categoria
-      const countRes = await fetch(
-        SUPABASE_URL + '/rest/v1/iscritti?select=id&categoria=ilike.' + encodeURIComponent(categoria),
-        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
-      );
-      const countData = await countRes.json();
-      const count = Array.isArray(countData) ? countData.length : 0;
-
-      if (count > 10) {
-        descrizioneRichiesta = true;
-        document.getElementById('step1b-sub').textContent =
-          'Ci sono già ' + count + ' persone interessate a "' + categoria + '" — aiutaci a trovare chi fa davvero per te.';
-        go('1b');
-      } else {
-        descrizioneRichiesta = false;
-        go('3');
-      }
-
-    } catch(e) {
-      console.error('Errore:', e);
-      descrizioneRichiesta = false;
-      go('3');
+  tagInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addTag(this.value);
+    } else if (e.key === 'Backspace' && this.value === '' && tags.length > 0) {
+      removeTag(tags.length - 1);
     }
+  });
 
-    btn.disabled = false;
-    btn.textContent = 'Avanti';
+  tagInput.addEventListener('blur', function() {
+    if (this.value.trim()) addTag(this.value);
+  });
+
+  function addTag(val) {
+    const v = val.replace(/,/g, '').trim().toLowerCase();
+    if (!v || tags.includes(v) || tags.length >= MAX_TAGS) {
+      tagInput.value = '';
+      return;
+    }
+    tags.push(v);
+    renderTags();
+    tagInput.value = '';
+    updateTagState();
+  }
+
+  function removeTag(i) {
+    tags.splice(i, 1);
+    renderTags();
+    updateTagState();
+  }
+
+  function renderTags() {
+    tagWrap.querySelectorAll('.tag').forEach(t => t.remove());
+    tags.forEach((t, i) => {
+      const el = document.createElement('span');
+      el.className = 'tag';
+      el.innerHTML = t + '<span class="tag-remove" onclick="removeTag(' + i + ')">×</span>';
+      tagWrap.insertBefore(el, tagInput);
+    });
+  }
+
+  function updateTagState() {
+    const hint = document.getElementById('tag-hint');
+    hint.textContent = tags.length + ' / ' + MAX_TAGS + ' parole chiave' + (tags.length === 0 ? ' — anche una sola è sufficiente' : '');
+    document.getElementById('n1').disabled = tags.length === 0;
+    tagInput.disabled = tags.length >= MAX_TAGS;
+    tagInput.placeholder = tags.length >= MAX_TAGS ? 'Massimo raggiunto' : 'es. fotografia, startup, musica...';
   }
 
   // --- WORD COUNT ---
-  function countWordsDesc() {
-    const t = document.getElementById('descrizione').value.trim();
-    document.getElementById('wc-desc').textContent = t === '' ? 0 : t.split(/\s+/).length;
+  function countWords() {
+    const t = document.getElementById('free-text').value.trim();
+    document.getElementById('wc').textContent = t === '' ? 0 : t.split(/\s+/).length;
   }
 
   // --- EMAIL ---
@@ -517,11 +527,9 @@
 
   // --- SUBMIT ---
   async function submitForm() {
-    const descEl = document.getElementById('descrizione');
     const payload = {
-      keyword: keyword,
-      categoria: categoria,
-      descrizione: descEl ? descEl.value || null : null,
+      keyword: tags.join(', '),
+      testo: document.getElementById('free-text').value || null,
       email: document.getElementById('email').value
     };
 
