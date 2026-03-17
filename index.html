@@ -351,7 +351,8 @@
     <div class="step" id="step-3">
       <div class="question">Dove ti avvisiamo?</div>
       <div class="question-sub">Ti scriveremo solo quando troviamo qualcuno compatibile.</div>
-      <input type="email" id="email" placeholder="la.tua@email.it" oninput="checkEmail()"/>
+      <input type="email" id="email" placeholder="Inserisci un'email" oninput="checkEmail()"/>
+      <div id="email-error" style="font-size:13px;color:#e53935;margin-top:-10px;margin-bottom:16px;display:none;">Fornisci un'email valida</div>
       <div class="privacy-row">
         <input type="checkbox" id="cb" onchange="checkEmail()"/>
         <label for="cb">Ho letto e accetto la <a href="privacy.html" target="_blank">Privacy Policy</a>. I miei dati saranno usati solo per il matching.</label>
@@ -469,7 +470,14 @@
   // --- EMAIL ---
   function checkEmail() {
     const e = document.getElementById('email').value.trim();
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) && document.getElementById('cb').checked;
+    const validGmail = /^[^\s@]+@gmail\.com$/.test(e);
+    const errorEl = document.getElementById('email-error');
+    if (e.length > 0 && !validGmail) {
+      errorEl.style.display = 'block';
+    } else {
+      errorEl.style.display = 'none';
+    }
+    const ok = validGmail && document.getElementById('cb').checked;
     document.getElementById('sub').disabled = !ok;
   }
 
