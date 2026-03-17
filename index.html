@@ -461,7 +461,7 @@
 
   function updateTagState() {
     const hint = document.getElementById('tag-hint');
-    hint.textContent = tags.length + ' / ' + MAX_TAGS + ' parole chiave' + (tags.length === 0 ? ' — anche una sola è sufficiente' : '');
+    hint.textContent = tags.length + ' / ' + MAX_TAGS + ' parole chiave' + (tags.length === 0 ? '' : '');
     document.getElementById('n1').disabled = tags.length === 0;
     tagInput.disabled = tags.length >= MAX_TAGS;
     tagInput.placeholder = tags.length >= MAX_TAGS ? 'Massimo raggiunto' : 'es. fotografia, startup, musica...';
