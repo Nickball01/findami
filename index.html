@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Findami — Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #fafaf8;
+      color: #0f0f0f;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .site-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: #0f0f0f;
+      margin-bottom: 64px;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    h1 em { font-style: italic; color: #888; }
+    p {
+      font-size: 15px;
+      color: #888;
+      line-height: 1.8;
+      max-width: 360px;
+    }
+    .badge {
+      margin-top: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid #e8e8e4;
+      border-radius: 100px;
+      font-size: 13px;
+      color: #888;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      background: #f5c842;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-name">Findami</div>
+  <h1>Stiamo sistemando<br/><em>alcune cose.</em></h1>
+  <p>Torniamo presto. Nel frattempo seguici su Instagram per gli aggiornamenti.</p>
+  <div class="badge">
+    <span class="dot"></span>
+    Lavori in corso
+  </div>
+</body>
+</html>
